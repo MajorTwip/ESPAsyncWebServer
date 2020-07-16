@@ -9,11 +9,11 @@ class AWS_FSEditor: public AsyncWebHandler {
     String _password; 
     bool _authenticated;
     uint32_t _startTime;
-  public:
+  public: 
 #ifdef ESP32
     AWS_FSEditor(const fs::FS& fs, const String& username=String(), const String& password=String());
 #else
-    AWS_FSEditor(const String& username=String(), const String& password=String(), const fs::FS& fs=SPIFFS);
+    AWS_FSEditor(const String& username=String(), const String& password=String(), const fs::FS& fs=LittleFS);
 #endif
     virtual bool canHandle(AsyncWebServerRequest *request) override final;
     virtual void handleRequest(AsyncWebServerRequest *request) override final;
