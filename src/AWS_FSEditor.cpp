@@ -1,4 +1,4 @@
-#include "SPIFFSEditor.h"
+#include "AWS_FSEditor.h"
 #include <FS.h>
 
 //File: edit.htm.gz, Size: 4151
@@ -377,9 +377,9 @@ static bool isExcluded(fs::FS &_fs, const char *filename) {
 // WEB HANDLER IMPLEMENTATION
 
 #ifdef ESP32
-SPIFFSEditor::SPIFFSEditor(const fs::FS& fs, const String& username, const String& password)
+AWS_FSEditor::AWS_FSEditor(const fs::FS& fs, const String& username, const String& password)
 #else
-SPIFFSEditor::SPIFFSEditor(const String& username, const String& password, const fs::FS& fs)
+AWS_FSEditor::AWS_FSEditor(const String& username, const String& password, const fs::FS& fs)
 #endif
 :_fs(fs)
 ,_username(username)
@@ -388,7 +388,7 @@ SPIFFSEditor::SPIFFSEditor(const String& username, const String& password, const
 ,_startTime(0)
 {}
 
-bool SPIFFSEditor::canHandle(AsyncWebServerRequest *request){
+bool AWS_FSEditor::canHandle(AsyncWebServerRequest *request){
   if(request->url().equalsIgnoreCase("/edit")){
     if(request->method() == HTTP_GET){
       if(request->hasParam("list"))
@@ -432,7 +432,7 @@ bool SPIFFSEditor::canHandle(AsyncWebServerRequest *request){
 }
 
 
-void SPIFFSEditor::handleRequest(AsyncWebServerRequest *request){
+void AWS_FSEditor::handleRequest(AsyncWebServerRequest *request){
   if(_username.length() && _password.length() && !request->authenticate(_username.c_str(), _password.c_str()))
     return request->requestAuthentication();
 
@@ -525,7 +525,7 @@ void SPIFFSEditor::handleRequest(AsyncWebServerRequest *request){
   }
 }
 
-void SPIFFSEditor::handleUpload(AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final){
+void AWS_FSEditor::handleUpload(AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final){
   if(!index){
     if(!_username.length() || request->authenticate(_username.c_str(),_password.c_str())){
       _authenticated = true;
